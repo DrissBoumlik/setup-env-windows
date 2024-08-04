@@ -12,6 +12,7 @@ $StepsQuestions = [ordered]@{
    GIT = [PSCustomObject]@{ Question = "- Download Git ?"; Answer = "no" }
    NVM = [PSCustomObject]@{ Question = "- Download Nvm ?"; Answer = "no" }
    CHOCO = [PSCustomObject]@{ Question = "- Download Chocolatey ?"; Answer = "no" }
+   REDIS = [PSCustomObject]@{ Question = "- Download Redis ?"; Answer = "no" }
    TOOLS = [PSCustomObject]@{ Question = "- Download TOOLS (eza, delta, bat, fzf, zoxide, tldr) ?"; Answer = "no" }
    CMDER = [PSCustomObject]@{ Question = "- Download & Configure Cmder ?"; Answer = "no" }
    FONTS = [PSCustomObject]@{ Question = "- Download Nerd Fonts "; Answer = "no" }
@@ -108,6 +109,19 @@ if ($StepsQuestions["NVM"].Answer -eq "yes") {
 }
 #endregion
 
+#region DOWNLOAD & INSTALL REDIS
+if ($StepsQuestions["REDIS"].Answer -eq "yes") {
+    try {
+        Write-Host "`nDownloading and installing REDIS..."
+        choco install redis-64 --version=3.0.503 -y > $null 2>&1
+        $WhatWasDoneMessages = Set-Success-Message -message "REDIS was installed successfully" -WhatWasDoneMessages $WhatWasDoneMessages
+    }
+    catch {
+        $WhatWasDoneMessages = Set-Error-Message -message "REDIS failed to install, try again" -exceptionMessage $_.InvocationInfo.PositionMessage -WhatWasDoneMessages $WhatWasDoneMessages
+    }
+}
+#endregion
+
 #region DOWNLOAD AND SETUP EZA, DELTA, BAT, FZF, ZOXIDE, TLDR
 if ($StepsQuestions["TOOLS"].Answer -eq "yes") {
     try {
@@ -123,7 +137,7 @@ if ($StepsQuestions["TOOLS"].Answer -eq "yes") {
         #endregion
 
         #region DOWNLOAD & SETUP DELTA
-        Write-Host "`nInstalling DELTA  (better git diff)..."
+        Write-Host "`nInstalling DELTA (better git diff)..."
         choco install delta -y > $null 2>&1
         #endregion
 
