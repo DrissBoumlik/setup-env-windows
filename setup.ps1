@@ -229,7 +229,7 @@ if ($StepsQuestions["PHP"].Answer -eq "yes") {
             "https://windows.php.net/downloads/releases/archives/php-8.0.9-Win32-vs16-x64.zip",
             "https://windows.php.net/downloads/releases/archives/php-8.1.9-Win32-vs16-x64.zip",
             "https://windows.php.net/downloads/releases/archives/php-8.2.9-Win32-vs16-x64.zip",
-            "https://windows.php.net/downloads/releases/php-8.3.9-Win32-vs16-x64.zip"
+            "https://windows.php.net/downloads/releases/archives/php-8.3.9-Win32-vs16-x64.zip"
         )
         Make-Directory -path "$downloadPath\env\zip"
         Make-Directory -path "$downloadPath\env\php_stuff\php"
@@ -430,6 +430,8 @@ if ($StepsQuestions["XDEBUG"].Answer -eq "yes") {
     }
 }
 #endregion
+
+RefreshEnv.cmd
 
 $WhatToDoNext = Set-Todo-Message -message "Run ./followup.ps1 when you're done for additional cmder configuration" -WhatToDoNext $WhatToDoNext
 

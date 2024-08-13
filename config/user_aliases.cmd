@@ -17,13 +17,13 @@ w:env=%windir%\System32\SystemPropertiesAdvanced.exe
 env:r=RefreshEnv.cmd
 
 rem =================== PLUGINS ============
-historyf="C:\Cmder\vendor\clink\clink_x64.exe" history | fzf $*
-historyf2="C:\Cmder\vendor\clink\clink_x64.exe" history | fzf $*
+historyf="%CMDER_ROOT%\vendor\clink\clink_x64.exe" history | fzf $*
+historyf2="%CMDER_ROOT%\vendor\clink\clink_x64.exe" history | fzf --exact --multi --border=rounded --color=border:7,marker:1,pointer:5,header:6,info:6,prompt:6,spinner:4 --reverse --tac --header="______________________" --cycle --pointer=">>" --marker=">>"
 aliasf=alias | fzf $*
 rem === zadd=z --add $*
 REM === zo=zoxide $*
 REM === z=zoxide query $*
-REM === zi=z -I $*
+zi=z -I $*
 REM === zi=zoxide query --interactive $*
 z+=zoxide add $*
 z-=zoxide remove $*
@@ -61,6 +61,8 @@ gplom=git pull origin master $*
 gpsom=git push origin master $*
 gi=git init $*
 gck=git checkout $*
+gckpl=git checkout $2 && git pull $1 $2
+gckr=git checkout $1/$2 && git checkout -b $2
 gckp=git checkout @{-$*}
 gm=git merge $*
 gb=git branch $*
@@ -136,7 +138,7 @@ pam=php artisan migrate $*
 pas=php artisan serve $*
 pa=php artisan $*
 pamfs=php artisan migrate:fresh --seed $*
-pamfspi=php artisan migrate:fresh --seed $t php artisan passport:install --force $*
+pamfspi=php artisan migrate:fresh --seed && php artisan passport:install --force $*
 parl=php artisan route:list $*
 pamf=php artisan migrate:fresh $*
 pamkmm=php artisan make:model $1 -m
@@ -159,18 +161,18 @@ pamkfm=php artisan make:factory $1Factory --model=$2
 pat=php artisan tinker $*
 padbs=php artisan db:seed $*
 pamks=php artisan make:seeder $1sSeeder
-pamkfsd=php artisan make:factory $1Factory --model=$1 $t php artisan make:seeder $1sSeeder
+pamkfsd=php artisan make:factory $1Factory --model=$1 && php artisan make:seeder $1sSeeder
 pakg=php artisan key:generate $*
 pamkcmp=php artisan make:component $*
-pamkall=php artisan make:model $1 -m -c -f $t php artisan make:seeder $1sSeeder
-pamkallmdl=php artisan make:model $1/$2 -m -c -f $t php artisan make:seeder $2sSeeder
-pamkallmdlsd=php artisan make:model $1/$2 -m -c -f $t php artisan make:seeder $3sSeeder
-pamkallsd=php artisan make:model $1 -m -c -f $t php artisan make:seeder $2sSeeder
-rfl=composer dumpautoload $t php artisan optimize $t php artisan cache:clear $t php artisan view:clear
-rfl1=composer1 dumpautoload $t php artisan cache:clear $t php artisan view:clear $t php artisan config:clear $t php artisan route:clear  
-pamkallr=php artisan make:model $1 -m -c -f $t php artisan make:seeder $1sSeeder $t php artisan make:resource $1Resource
-rld=git pull origin master $t composer dumpautoload $t php artisan optimize $t php artisan cache:clear $t php artisan view:clear $t npm run dev $*
-rld1=git pull origin master $t composer1 dumpautoload $t php artisan optimize $t php artisan cache:clear $t php artisan view:clear $t npm run dev $*
+pamkall=php artisan make:model $1 -m -c -f && php artisan make:seeder $1sSeeder
+pamkallmdl=php artisan make:model $1/$2 -m -c -f && php artisan make:seeder $2sSeeder
+pamkallmdlsd=php artisan make:model $1/$2 -m -c -f && php artisan make:seeder $3sSeeder
+pamkallsd=php artisan make:model $1 -m -c -f && php artisan make:seeder $2sSeeder
+rfl=composer dumpautoload && php artisan optimize && php artisan cache:clear && php artisan view:clear
+rfl1=composer1 dumpautoload && php artisan cache:clear && php artisan view:clear && php artisan config:clear && php artisan route:clear  
+pamkallr=php artisan make:model $1 -m -c -f && php artisan make:seeder $1sSeeder && php artisan make:resource $1Resource
+rld=git pull origin master && composer dumpautoload && php artisan optimize && php artisan cache:clear && php artisan view:clear && npm run dev $*
+rld1=git pull origin master && composer1 dumpautoload && php artisan optimize && php artisan cache:clear && php artisan view:clear && npm run dev $*
 pamkj=php artisan make:job $*Job
 pamke=php artisan make:event $*Event
 parc=php artisan route:clear  

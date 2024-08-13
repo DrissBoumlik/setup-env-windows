@@ -16,6 +16,8 @@ foreach ($key in $StepsQuestions.Keys) {
 }
 #endregion
 
+$downloadPath = Setup-Container-Directory
+
 $overrideExistingEnvVars = Prompt-YesOrNoWithDefault -message "`nWould you like to override the existing environment variables"
 
 $WhatWasDoneMessages = @()
@@ -85,7 +87,6 @@ if ($StepsQuestions["GIT"].Answer -eq "yes") {
 
 #region COPY CMDER CONFIG & ALIASES
 if ($StepsQuestions["CMDER"].Answer -eq "yes") {
-    $downloadPath = Setup-Container-Directory
 
     $backupFile = "$downloadPath\Cmder\vendor\conemu-maximus5\ConEmu.xml.bak"
     if (-not (Test-Path $backupFile)) {
@@ -112,8 +113,12 @@ if ($StepsQuestions["CMDER"].Answer -eq "yes") {
     Get-Content -Path "$PWD\config\user_profile.cmd" | Add-Content -Path "$downloadPath\Cmder\config\user_profile.cmd"
 
     Make-Directory "$downloadPath\env\tools"
-    Copy-Item -Path "$PWD\config\set-env.bat" -Destination "$downloadPath\env\tools\set-env.bat"
+    Make-Directory "$downloadPath\env\tools\scripts"
+    Copy-Item -Path "$PWD\tools\scripts\set-env.bat" -Destination "$downloadPath\env\tools\scripts\set-env.bat"
     Add-Alias-To-Cmder -alias "setvar=""$downloadPath\env\tools\set-env.bat"" `$1 `$2 && RefreshEnv.cmd" -downloadPath $downloadPath
+    Copy-Item -Path "$PWD\tools\scripts\toggle-xdebug.ps1" -Destination "$downloadPath\env\tools\scripts\toggle-xdebug.ps1"
+    Add-Alias-To-Cmder -alias "togglexdbg=powershell -ExecutionPolicy Bypass -File ""$downloadPath\env\tools\scripts\toggle-xdebug.ps1"" $*" -downloadPath $downloadPath
+
     $WhatWasDoneMessages = Set-Success-Message -message "ConEmu.xml & user_aliases.cmd were added to Cmder successfully" -WhatWasDoneMessages $WhatWasDoneMessages
 
     $directories = Get-ChildItem -Path "C:\" -Directory -ErrorAction SilentlyContinue -Force | Where-Object { $_.Name -match 'xampp' }
